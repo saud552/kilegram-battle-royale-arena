@@ -33,8 +33,15 @@ const GLBCharacter: React.FC<{ characterId: string }> = ({ characterId }) => {
     const c = scene.clone();
     c.traverse((child: any) => {
       if (child.isMesh && child.material) {
-        child.material.side = THREE.DoubleSide;
-        child.material.needsUpdate = true;
+        const oldMat = child.material;
+        child.material = new THREE.MeshStandardMaterial({
+          color: oldMat.color || new THREE.Color(0x888888),
+          map: oldMat.map || null,
+          normalMap: oldMat.normalMap || null,
+          roughness: oldMat.roughness ?? 0.5,
+          metalness: oldMat.metalness ?? 0.3,
+          side: THREE.DoubleSide,
+        });
       }
     });
     return c;
